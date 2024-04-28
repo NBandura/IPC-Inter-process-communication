@@ -11,12 +11,13 @@ class buzzWordsEinlesenMethoden:
         print("-----------------------------------------")
         dateipfad=filedialog.askopenfilename()
         
-        #Lesen der Datei und speichern
-        with open (dateipfad,"r") as buzzWordDatei:
-             inhaltString = buzzWordDatei.read()
-        BuzzWordsArray=inhaltString.split(",")
+        #Lesen, speichern der Datei und TryCatch falls Pfad ungültig
+        try:
+            with open (dateipfad,"r") as buzzWordDatei:
+                inhaltString = buzzWordDatei.read()
+            BuzzWordsArray=inhaltString.split(",")
+        except Exception:
+            BuzzWordsArray=["Ungültige BuzzWordDatei"]
 
         #Zurückgeben
         return BuzzWordsArray
-
-       
