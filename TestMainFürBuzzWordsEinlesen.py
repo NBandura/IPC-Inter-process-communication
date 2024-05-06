@@ -1,3 +1,0 @@
-from buzzWordsEinlesen import buzzWordsEinlesenMethoden
-buzzWords=buzzWordsEinlesenMethoden.einlesen()
-print(buzzWords)
