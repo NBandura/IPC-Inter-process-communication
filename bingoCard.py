@@ -1,12 +1,12 @@
-from asciimatics.exceptions import StopApplication  # Importiert die StopApplication Ausnahme aus asciimatics.exceptions
-from asciimatics.screen import Screen  # Importiert die Screen-Klasse aus asciimatics
-from asciimatics.exceptions import ResizeScreenError  # Importiert die ResizeScreenError Ausnahme aus asciimatics
-from asciimatics.event import KeyboardEvent, MouseEvent  # Importiert die KeyboardEvent und MouseEvent Klassen aus asciimatics
-from tkinter import Tk  # Importiert die Tk-Klasse aus tkinter
-from tkinter.filedialog import askopenfilename  # Importiert die askopenfilename Funktion aus tkinter.filedialog
-import random  # Importiert das random Modul
-import argparse  # Importiert das argparse Modul
-import time  # Importiert das time Modul
+from asciimatics.exceptions import StopApplication  
+from asciimatics.screen import Screen 
+from asciimatics.exceptions import ResizeScreenError 
+from asciimatics.event import KeyboardEvent, MouseEvent  
+from tkinter import Tk  
+from tkinter.filedialog import askopenfilename  
+import random 
+import argparse  
+import time  
 
 def read_words():
     Tk().withdraw()  # Verhindert das Anzeigen eines leeren Tkinter-Fensters
@@ -17,12 +17,12 @@ def read_words():
 
 def create_bingo_board(words, x_axis, y_axis):
     random.shuffle(words)  # Mischen Sie die Wörter in zufälliger Reihenfolge
-    return [words[i*x_axis:i*x_axis+x_axis] for i in range(y_axis)]  # Erstellt das Bingo-Brett und gibt es zurück
+    return [words[i*x_axis:i*x_axis+x_axis] for i in range(y_axis)]  # Erstellt das Bingo-Brett mit unserer Struktur für die Wörter und gibt es zurück
 
 def draw_board(screen, board, max_word_length):
     for i, row in enumerate(board):  # Geht durch jede Zeile des Bretts
         for j, word in enumerate(row):  # Geht durch jedes Wort in der Zeile
-            screen.print_at('|' + word.center(max_word_length) + '|', j*(max_word_length+4), i*3)  # Zeichnet das Wort auf dem Bildschirm
+            screen.print_at('|' + word.center(max_word_length) + '|', j*(max_word_length+4), i*3)  # Zeichnet das Wort auf dem Bildschirm | j = Spaltennummer | i = Zeilennummer
             screen.print_at('-'*(len(board[0])*(max_word_length+3)), 0, i*3+1) # Zeichnet eine Trennlinie auf dem Bildschirm
     screen.refresh()  # Aktualisiert den Bildschirm
 
@@ -86,7 +86,7 @@ def main(screen, x_axis, y_axis):
     if not validate_words(words, x_axis, y_axis, screen):  # Überprüft, ob genug Wörter vorhanden sind
         return  # Beendet die Funktion
     bingo_board = create_bingo_board(words, x_axis, y_axis)  # Erstellt das Bingo-Brett
-    max_word_length = max(len(word) for row in bingo_board for word in row)  # Findet die Länge des längsten Wortes
+    max_word_length = max(len(word) for row in bingo_board for word in row)  # Findet die Länge des längsten Wortes | ausbauen dort wird das Board angepasst an die länge des längsten wortes
     draw_board(screen, bingo_board, max_word_length)  # Zeichnet das Brett auf dem Bildschirm
     while True:  # Startet eine Endlosschleife
         event = screen.get_event()  # Holt das nächste Ereignis
@@ -110,6 +110,8 @@ if __name__ == "__main__":
     # funktion mit dem Joker bei größeren feldern 
     # clean machen 
     # das man mit den pfeil Tasten auswählen kann muss noch realisiert werden. Bis jetzt geht nur maus und q zum beenden
+    # Bingo board falsch man was flasch ankreuzt das rückgängig machen kann
+    # Bingoboard abgehakte Wörter anders darstellen
 
     # Hier ist jetzt schon in der Main ein beispiel zum direkt ausführen. Wir müssen natürlich eine weiter eigen Klasse bingo Game noch erstellen die dann imm er auf BingoCard zugreifen kann.
     # Außerdem sollten wir nochmal schauen ob wir das so machen wollen, wie in Line 117 beschrieben wird. Also wie Baun uns das Auf dem Blatt gegeben hat, oder ob wir das auch in Asciimatics und die art GUI einbauen wollen.
