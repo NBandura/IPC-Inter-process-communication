@@ -8,8 +8,7 @@ class Logger:
 
     def createFile(self, playerId): #Methode um Datei für Spieler zu erstellen
         time = datetime.datetime.now()
-        file = open(f"{time} PlayerId: {playerId}.txt", "w")
-        return file
+        file = open(time.strftime("%Y-%m-%d-%H-%M-%S") + f"-bingo-{playerId}.txt", "w")
         
         
 
