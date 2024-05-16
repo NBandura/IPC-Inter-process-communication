@@ -8,9 +8,8 @@ class Logger:
 
     def createFile(self, playerId): #Methode um Datei für Spieler zu erstellen
         time = datetime.datetime.now()
-        file = open("{time} PlayerId: + {playerId}.txt")
+        file = open(f"{time} PlayerId: {playerId}.txt", "w")
         return file
-
         
         
 

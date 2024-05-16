@@ -1,3 +1,4 @@
-import Logger
+from Logger import Logger
 
-Logger("234554")
+
+spieler1 = Logger(23)
