@@ -15,9 +15,9 @@ def read_words():
         words = file.read().splitlines()  # Liest die Wörter aus der Datei | splitlines() trennt die Wörter an den Zeilenumbrüchen
     return words  # Gibt die Liste der Wörter zurück
 
-def create_bingo_board(words, x_axis, y_axis):
+def create_bingo_board(words, size):
     random.shuffle(words)  # Mischen Sie die Wörter in zufälliger Reihenfolge
-    return [words[i*x_axis:i*x_axis+x_axis] for i in range(y_axis)]  # Erstellt das Bingo-Brett mit unserer Struktur für die Wörter und gibt es zurück
+    return [words[i*size:i*size+size] for i in range(size)]  # Erstellt das Bingo-Brett mit unserer Struktur für die Wörter und gibt es zurück
 
 def draw_board(screen, board, max_word_length):
     for i, row in enumerate(board):  # Geht durch jede Zeile des Bretts
@@ -49,13 +49,13 @@ def check_bingo(board):
         return True
     return False
 
-def validate_words(words, x_axis, y_axis, screen):
-    if len(words) < x_axis * y_axis:  # Wenn es nicht genug Wörter gibt, um das Brett zu füllen
+def validate_words(words, size, screen):
+    if len(words) < size * size:  # Wenn es nicht genug Wörter gibt, um das Brett zu füllen
         screen.print_at("Es sind nicht genug Wörter vorhanden, um ein Brett dieser Größe zu erstellen.", 0, 0)  # Gibt eine Fehlermeldung aus
         screen.refresh()  # Aktualisiert den Bildschirm
         time.sleep(5)  # Wartet 5 Sekunden
         return False  # Gibt False zurück, wenn nicht genug Wörter vorhanden sind
-    if x_axis < 3 or y_axis < 3:  # Wenn die Dimensionen des Bretts zu klein sind
+    if size < 3:  # Wenn die Dimensionen des Bretts zu klein sind
         screen.print_at("Die Dimensionen des Bretts sind zu klein. Mindestgröße ist 3x3.", 0, 0)  # Gibt eine Fehlermeldung aus
         screen.refresh()  # Aktualisiert den Bildschirm
         time.sleep(5)  # Wartet 5 Sekunden
@@ -81,11 +81,11 @@ def handle_event(event, screen, board, max_word_length):
                     
                    
 
-def main(screen, x_axis, y_axis):
+def main(screen,size):
     words = read_words()  # Liest die Wörter aus der Datei
-    if not validate_words(words, x_axis, y_axis, screen):  # Überprüft, ob genug Wörter vorhanden sind
+    if not validate_words(words, size, screen):  # Überprüft, ob genug Wörter vorhanden sind
         return  # Beendet die Funktion
-    bingo_board = create_bingo_board(words, x_axis, y_axis)  # Erstellt das Bingo-Brett
+    bingo_board = create_bingo_board(words, size)  # Erstellt das Bingo-Brett
     max_word_length = max(len(word) for row in bingo_board for word in row)  # Findet die Länge des längsten Wortes | ausbauen dort wird das Board angepasst an die länge des längsten wortes
     draw_board(screen, bingo_board, max_word_length)  # Zeichnet das Brett auf dem Bildschirm
     while True:  # Startet eine Endlosschleife
@@ -96,17 +96,14 @@ def main(screen, x_axis, y_axis):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Bingo-Spiel.')  # Erstellt einen ArgumentParser
-    parser.add_argument('-x', '--xaxis', type=int, required=True, help='Die Größe der x-Achse des Bingo-Bretts.')  # Fügt ein Argument für die x-Achse hinzu
-    parser.add_argument('-y', '--yaxis', type=int, required=True, help='Die Größe der y-Achse des Bingo-Bretts.')  # Fügt ein Argument für die y-Achse hinzu
+    parser.add_argument('-s', '--size', type=int, required=True, help='Die Größe des Bingobretts.')  # Fügt ein Argument für die Größe hinzu
     args = parser.parse_args()  # Verarbeitet die Befehlszeilenargumente
     try:
-        Screen.wrapper(main, arguments=(args.xaxis, args.yaxis,))  # Startet das Spiel
+        Screen.wrapper(main, arguments=(args.size,))  # Startet das Spiel
     except ResizeScreenError:  # Wenn ein ResizeScreenError auftritt
         pass  # Ignoriert den Fehler
 
 
-
-    # funktion damit man keine bsp 8*2 felder oder so machen kann
     # funktion mit dem Joker bei größeren feldern 
     # clean machen 
     # das man mit den pfeil Tasten auswählen kann muss noch realisiert werden. Bis jetzt geht nur maus und q zum beenden
@@ -116,7 +113,7 @@ if __name__ == "__main__":
     # Hier ist jetzt schon in der Main ein beispiel zum direkt ausführen. Wir müssen natürlich eine weiter eigen Klasse bingo Game noch erstellen die dann imm er auf BingoCard zugreifen kann.
     # Außerdem sollten wir nochmal schauen ob wir das so machen wollen, wie in Line 117 beschrieben wird. Also wie Baun uns das Auf dem Blatt gegeben hat, oder ob wir das auch in Asciimatics und die art GUI einbauen wollen.
 
-    # python bingoCard.py -x 4 -y 4  bzw. python bingoCard.py -x '' -y '' startet das Programm im Terminal
+    # python bingoCard.py -s 4 bzw. python bingoCard.py -s ' ' startet das Programm im Terminal
     # module installieren: pip install asciimatics | alles andere sollte schon in der Base von Anaconda vorhanden sein
 
     # Also erst asciimatics instalieren und dann bingoCard.py ausführen mit line 117 und dann könnt ihr die einzelenen Felder anklicken und es wird ein X reingeschrieben.
