@@ -41,5 +41,5 @@ print("Methode getGroesse() aufgerufen")
 print("Größe:", groesse)
 print()
 
-IPC.beenden()
-print("Methode beenden() aufgerufen")
+IPC.speicherFreigeben()
+print("Methode speicherFreigeben() aufgerufen")
