@@ -7,7 +7,7 @@ def _connect():
     # Erzeugen des Shared Memory Objekts mit dem Namen "BuzzWordBingo" und einer Größe von 1024 Bytes
     shared_memory = posix_ipc.SharedMemory(name="BuzzWordBingo", size=1024, flags=posix_ipc.O_CREAT)
 
-    try:
+    try: # Check, ob bereits ein list-Objekt im Shared Memory vorhanden ist, sonst wird ein leeres list-Objekt erzeugt
         # Erzeugen einer mmap-Instanz, um auf den Shared Memory zuzugreifen
         shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_READ)
         # Lesen der Daten aus dem Shared Memory und Umwandeln in eine Liste
