@@ -35,7 +35,6 @@ def _read():
 # Funktion zum Schreiben der Daten in den Shared Memory
 def _write(speicherListe):
     listeAlsCode = pickle.dumps(speicherListe)
-    speicherFreigeben() # Löschen des alten Shared Memory, damit es keine Probleme mit der Serialisierung gibt
     shared_memory = _connect()
     shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_WRITE)
     shared_memory_mmap.write(listeAlsCode)
