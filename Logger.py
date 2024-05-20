@@ -17,19 +17,19 @@ class Logger:
     def logGameStart(self):
         time = datetime.datetime.now()
         file = open(self.file, "a")
-        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Start des Spiels")
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Start des Spiels\n")
         file.close
 
     def logGameEnd(self):
         time = datetime.datetime.now()
         file = open(self.file, "a")
-        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Ende des Spiels")
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Ende des Spiels\n")
         file.close
 
     def logCrossedWord(self, word, x, y):
         time = datetime.datetime.now()
         file = open(self.file, "a") 
-        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + f" ({x}/{y})")
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + f" ({x}/{y})\n")
         file.close
     
     def logGameResult(self, result):
