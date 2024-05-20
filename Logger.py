@@ -2,7 +2,6 @@ import datetime #Importieren des Time moduls zum erfassen der Zeit
 import os #Importieren des OS Moduls, um Dateien zu erstellen und zu verwalten
 
 class Logger:
-    
     def __init__(self, playerId): #Konstruktor für ein Logger Objekt
         self.playerId = playerId
         self.file = self._logCreateFile()
