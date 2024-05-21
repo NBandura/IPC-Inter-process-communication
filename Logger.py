@@ -25,7 +25,7 @@ class Logger:
         file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Ende des Spiels\n")
         file.close
 
-    def logCrossedWord(self, word, x, y):
+    def logWord(self, word, x, y):
         time = datetime.datetime.now()
         file = open(self.file, "a") 
         file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + f" ({x}/{y})\n")
