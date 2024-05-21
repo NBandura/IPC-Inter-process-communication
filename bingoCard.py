@@ -2,18 +2,17 @@ from asciimatics.exceptions import StopApplication
 from asciimatics.screen import Screen 
 from asciimatics.exceptions import ResizeScreenError 
 from asciimatics.event import KeyboardEvent, MouseEvent  
-from tkinter import Tk  
-from tkinter.filedialog import askopenfilename  
 import random 
 import argparse  
 import time  
 
-def read_words():
-    Tk().withdraw()  # Verhindert das Anzeigen eines leeren Tkinter-Fensters
-    filename = askopenfilename()  # Zeigt einen Dateiauswahldialog an
-    with open(filename, 'r') as file:  # Öffnet die ausgewählte Datei zum Lesen
+def read_words(filename):
+    with open(filename, 'r') as file:  # Öffnet die angegebene Datei zum Lesen
         words = file.read().splitlines()  # Liest die Wörter aus der Datei | splitlines() trennt die Wörter an den Zeilenumbrüchen
     return words  # Gibt die Liste der Wörter zurück
+
+def get_max_word_length(board):
+    return max(len(word) for row in board for word in row)
 
 def create_bingo_board(words, size):
     random.shuffle(words)  # Mischen Sie die Wörter in zufälliger Reihenfolge
@@ -25,6 +24,13 @@ def draw_board(screen, board, max_word_length):
             screen.print_at('|' + word.center(max_word_length) + '|', j*(max_word_length+4), i*3)  # Zeichnet das Wort auf dem Bildschirm | j = Spaltennummer | i = Zeilennummer
             screen.print_at('-'*(len(board[0])*(max_word_length+3)), 0, i*3+1) # Zeichnet eine Trennlinie auf dem Bildschirm
     screen.refresh()  # Aktualisiert den Bildschirm
+
+def add_joker_field(board):
+    size = len(board)
+    if size in [5, 7]:
+        middle = size // 2
+        board[middle][middle] = 'JOKER'
+    return board
 
 def cross_out_word(board, word):
     for i, row in enumerate(board):  # Geht durch jede Zeile des Bretts
@@ -81,12 +87,13 @@ def handle_event(event, screen, board, max_word_length):
                     
                    
 
-def main(screen,size):
-    words = read_words()  # Liest die Wörter aus der Datei
+def main(screen,size, filename):
+    words = read_words(filename)  # Liest die Wörter aus der Datei
     if not validate_words(words, size, screen):  # Überprüft, ob genug Wörter vorhanden sind
         return  # Beendet die Funktion
     bingo_board = create_bingo_board(words, size)  # Erstellt das Bingo-Brett
-    max_word_length = max(len(word) for row in bingo_board for word in row)  # Findet die Länge des längsten Wortes | ausbauen dort wird das Board angepasst an die länge des längsten wortes
+    bingo_board = add_joker_field(bingo_board)
+    max_word_length = get_max_word_length(bingo_board)  # Findet die Länge des längsten Wortes | ausbauen dort wird das Board angepasst an die länge des längsten wortes
     draw_board(screen, bingo_board, max_word_length)  # Zeichnet das Brett auf dem Bildschirm
     while True:  # Startet eine Endlosschleife
         event = screen.get_event()  # Holt das nächste Ereignis
@@ -97,9 +104,10 @@ def main(screen,size):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Bingo-Spiel.')  # Erstellt einen ArgumentParser
     parser.add_argument('-s', '--size', type=int, required=True, help='Die Größe des Bingobretts.')  # Fügt ein Argument für die Größe hinzu
+    parser.add_argument('-f', '--file', type=str, required=True, help='Die Datei, aus der die Wörter gelesen werden sollen.')  # Fügt ein Argument für die Datei hinzu
     args = parser.parse_args()  # Verarbeitet die Befehlszeilenargumente
     try:
-        Screen.wrapper(main, arguments=(args.size,))  # Startet das Spiel
+        Screen.wrapper(main, arguments=(args.size, args.file))  # Startet das Spiel
     except ResizeScreenError:  # Wenn ein ResizeScreenError auftritt
         pass  # Ignoriert den Fehler
 
