@@ -14,4 +14,4 @@ logger.logGameEnd()
 logger.logGameResult(1)
 
 #Angekreuztes Wort in Log-Datei schreiben, x(1) und y(2) um Koordinaten zu übergeben
-logger.logWord("Testwort", 1, 2)
+logger.logWord("Testwort", "button_1_2")

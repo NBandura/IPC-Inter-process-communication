@@ -1,39 +1,43 @@
-import datetime #Importieren des Time moduls zum erfassen der Zeit
-import os #Importieren des OS Moduls, um Dateien zu erstellen und zu verwalten
+import datetime #Modul zum erfassen der aktuellen Zeit
+import os #Modul zum Interagieren mit dem System
 
 class Logger:
-    def __init__(self, playerId): #Konstruktor für ein Logger Objekt
-        self.playerId = playerId
-        self.file = self._logCreateFile()
+    def __init__(self, playerId):
+        self.playerId = playerId #Speichern von playerId im Objekt
+        self.filename = self._logCreateFile() #Erstellen der Log-Datei direkt bei erstellen eines Logger-Objekts
 
-    def _logCreateFile(self): #Methode um Datei für Spieler zu erstellen
-        time = datetime.datetime.now()
-        filename = time.strftime("%Y-%m-%d-%H-%M-%S") + f"-bingo-{self.playerId}.txt"
-        file = open(filename, "w")
-        file.close
+    def _logCreateFile(self):
+        time = datetime.datetime.now() #Erfassen der aktuellen Zeit
+        filename = time.strftime("logs/" + "%Y-%m-%d-%H-%M-%S") + f"-bingo-{self.playerId}.txt" #Erstellen des Dateinamens über Pfad
+        file = open(filename, "w") #Erstellen der Datei
+        file.close #Schließen der Datei um die Datei zu initialisieren
         return filename
 
+    #Schreiben des Spielstarts in die Log-Datei
     def logGameStart(self):
         time = datetime.datetime.now()
-        file = open(self.file, "a")
+        file = open(self.filename, "a")
         file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Start des Spiels\n")
         file.close
 
+    #Schreiben des Spielendes in die Log-Datei
     def logGameEnd(self):
         time = datetime.datetime.now()
-        file = open(self.file, "a")
+        file = open(self.filename, "a")
         file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Ende des Spiels\n")
         file.close
 
-    def logWord(self, word, x, y):
+    #Schreiben eines markierten Wortes mit Koordinaten in die Log-Datei 
+    def logWord(self, word, buttonId):
         time = datetime.datetime.now()
-        file = open(self.file, "a") 
-        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + f" ({x}/{y})\n")
+        file = open(self.filename, "a") 
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + f"{buttonId}\n")
         file.close
     
+    #Schreibt das Spielergebnis über eine Statusvariable
     def logGameResult(self, result):
         time = datetime.datetime.now()
-        file = open(self.file, "a")
+        file = open(self.filename, "a")
         if result == 0:
             file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Sieg\n")
         elif result == 1:

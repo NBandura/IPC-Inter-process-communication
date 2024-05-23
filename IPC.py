@@ -15,8 +15,8 @@ def _connect():
         shared_memory_mmap.close()
         speicherListe = pickle.loads(listeAlsCode)
     except pickle.UnpicklingError:
-        # Falls ein Fehler beim Entpacken der Daten auftritt, weil ohne keine Liste da ist, wird eine leere Liste erzeugt und in den Shared Memory geschrieben
-        listeAlsCode = pickle.dumps(["", "", ""])
+        # Falls ein Fehler beim Entpacken der Daten auftritt, weil keine Liste da ist, wird eine leere Liste erzeugt und in den Shared Memory geschrieben
+        listeAlsCode = pickle.dumps(["", "", "", ""])
         shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_WRITE)
         shared_memory_mmap.write(listeAlsCode)
         shared_memory_mmap.close()
@@ -66,12 +66,29 @@ def getGroesse():
     speicherListe = _read()
     return speicherListe[2]
 
+# Funktion zum Abrufen der Wortliste als String
+def _getWortString():
+    speicherListe = _read()
+    return speicherListe[3]
+
+# Funktion zum Abrufen der Wortliste als Liste
+def getWortListe():
+    wortString = _getWortString()
+    wortListe = wortString.split(";")
+    return wortListe
+
+# Funktion zum Abrufen des letzten Wortes
+def getLastWort():
+    wortListe = getWortListe()
+    return wortListe[-1]
+
 # Funktion zum Setzen des Bingo-Status
 def bingo():
     position0 = "Bingo"
     position1 = getDateipfad()
     position2 = getGroesse()
-    speicherListe = [position0, position1, position2]
+    position3 = _getWortString()
+    speicherListe = [position0, position1, position2,position3]
     _write(speicherListe)
 
 # Funktion zum Setzen des Dateipfads
@@ -82,7 +99,8 @@ def setDateipfad(dateipfad):
         position0 = ""
     position1 = dateipfad
     position2 = getGroesse()
-    speicherListe = [position0, position1, position2]
+    position3 = _getWortString()
+    speicherListe = [position0, position1, position2,position3]
     _write(speicherListe)
 
 # Funktion zum Setzen der Größe des Spielfeldes
@@ -93,8 +111,28 @@ def setGroesse(groesse):
         position0 = ""
     position1 = getDateipfad()
     position2 = groesse
-    speicherListe = [position0, position1, position2]
+    position3 = _getWortString()
+    speicherListe = [position0, position1, position2,position3]
     _write(speicherListe)
+
+# Funktion zum Hinzufügen eines Wortes zur Wortliste
+def addWord(wort):
+    if checkIfBingo():
+        position0 = "Bingo"
+    else:
+        position0 = ""
+    position1 = getDateipfad()
+    position2 = getGroesse()
+    if(len(_getWortString()) > 0):
+        wort = ";" + wort
+    else:
+        wort = wort
+    position3 = _getWortString() + wort
+    speicherListe = [position0, position1, position2,position3]
+    _write(speicherListe)
+
+
+
 
 # Hauptprogramm
 if __name__ == '__main__':
