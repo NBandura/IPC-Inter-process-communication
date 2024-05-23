@@ -1,9 +1,11 @@
-import IPC
+from IPC import SpielIPC
 print()
 print()
 print()
 print()
-
+spielname="Test"
+IPC=SpielIPC(spielname)
+print("Mit Spiel "+spielname+" verbunden")
 
 print("Ausgangssituation:")
 
@@ -16,6 +18,8 @@ print("Größe:", IPC.getGroesse())
 print("Wortliste:", IPC.getWortListe())
 
 print("Letztes Wort:", IPC.getLastWort())
+
+print("Start-Status:", IPC.checkIfStarted())
 
 print("------------------------------")
 
@@ -32,6 +36,9 @@ IPC.addWord("Testwort")
 print("Methode addWort('Testwort') aufgerufen")
 IPC.addWord("Testwort2")
 print("Methode addWort('Testwort2') aufgerufen")
+
+IPC.startGame()
+print("Methode startGame() aufgerufen")
 
 print("------------------------------")
 
@@ -58,6 +65,11 @@ print()
 letztes_wort = IPC.getLastWort()
 print("Methode getLastWort() aufgerufen")
 print("Letztes Wort:", letztes_wort)
+print()
+
+start_status = IPC.checkIfStarted()
+print("Methode checkIfStarted() aufgerufen: Rückgabewert ist boolenischer Wert")
+print("Start-Status:", start_status)
 print()
 
 print("------------------------------")
