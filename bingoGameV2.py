@@ -2,8 +2,7 @@ import random
 from textual import on
 from textual.app import App
 from textual.widgets import Label, Footer, Button, Static
-from Logger import Logger
-import os
+import sys
 
 import argparse
 
@@ -19,14 +18,19 @@ args = parser.parse_args()
 # Dateipfad aus den Argumenten extrahieren
 dateipfad = args.datei
 size = args.size
+
+# Überprüfen, ob die Größe des Spielfelds zwischen 3 und 7 liegt
+if size < 3 or size > 7:
+    print("Die Größe des Spielfelds muss zwischen 3 und 7 liegen.")
+    sys.exit(1)
+
+
 # Wörter werden eingelesen und in einer Liste gespeichert
 buzzword_Wörter = []
 with open(dateipfad, 'r') as file:
     buzzword_Wörter = [zeile.strip() for zeile in file]
 
 class Bingo(App):
-    logger = Logger(os.getpid())
-    
     CSS_PATH = "stylesMBW.tcss"
     
     def compose(self):
