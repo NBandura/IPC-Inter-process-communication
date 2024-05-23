@@ -120,7 +120,7 @@ class Bingo(App):
     @on(Button.Pressed)  # Behandelt das Ereignis, wenn ein beliebiger Button gedrückt wird
     def wort_streiche(self, event: Button.Pressed):
         buttonName = str(event.button.label)
-        button_id = event.button.id  # Damit man eben genau diesen Button anspricht, keinen anderen 
+        button_id = str(event.button.id)  # Damit man eben genau diesen Button anspricht, keinen anderen 
         logger.logWord(buttonName, button_id)
         # Überprüft, ob der Button Teil des Grids ist
         if button_id.startswith("button_"):  # Nur die Buttons, die wirklich auch in der Grid, also Tabelle, sind
