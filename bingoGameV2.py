@@ -3,8 +3,13 @@ from textual import on
 from textual.app import App
 from textual.widgets import Label, Footer, Button, Static
 import sys
+import os
+from Logger import Logger
 
 import argparse
+
+logger = Logger(os.getpid()) #Logger für jeden Prozess erstellen
+logger.logGameStart()
 
 # ArgumentParser erstellen
 parser = argparse.ArgumentParser(description="Bingo-Spiel")
@@ -114,7 +119,9 @@ class Bingo(App):
 
     @on(Button.Pressed)  # Behandelt das Ereignis, wenn ein beliebiger Button gedrückt wird
     def wort_streiche(self, event: Button.Pressed):
+        buttonName = str(event.button.label)
         button_id = event.button.id  # Damit man eben genau diesen Button anspricht, keinen anderen 
+        logger.logWord(buttonName, button_id)
         # Überprüft, ob der Button Teil des Grids ist
         if button_id.startswith("button_"):  # Nur die Buttons, die wirklich auch in der Grid, also Tabelle, sind
             if button_id in self.button_status:
@@ -134,6 +141,7 @@ class Bingo(App):
     @on(Button.Pressed, "#bingo_confirm")  # Event-Handler für den Bingo-Bestätigungsbutton
     def on_bingo_confirm(self, event):
         if self.überprüfe_bingo():
+            logger.logGameResult(0)
             self.update_gewonnen_label("Bingo!") 
             #Message für Bingo gewonnen nach dem Button gedrückt wurde 
         else:
@@ -149,7 +157,8 @@ class Bingo(App):
 
     @on(Button.Pressed, "#quit")  # Event-Handler für den Quit-Button
     def on_quit(self, event):
-        self.quit()
+        logger.logGameEnd()
+        self.exit()
 
 if __name__ == "__main__":
     Bingo().run()
