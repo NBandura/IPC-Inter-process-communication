@@ -28,12 +28,12 @@ class Logger:
         file.close
 
     #Schreiben eines markierten Wortes mit Koordinaten in die Log-Datei 
-    def logWord(self, word, buttonId):
+    def logWord(self, word, x, y):
         time = datetime.datetime.now()
         file = open(self.filename, "a") 
-        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + f"{buttonId}\n")
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + f" ({x}/{y})\n")
         file.close
-    
+
     #Schreibt das Spielergebnis über eine Statusvariable
     def logGameResult(self, result):
         time = datetime.datetime.now()
