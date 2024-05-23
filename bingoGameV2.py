@@ -2,6 +2,8 @@ import random
 from textual import on
 from textual.app import App
 from textual.widgets import Label, Footer, Button, Static
+from Logger import Logger
+import os
 
 import argparse
 
@@ -23,6 +25,8 @@ with open(dateipfad, 'r') as file:
     buzzword_Wörter = [zeile.strip() for zeile in file]
 
 class Bingo(App):
+    logger = Logger(os.getpid())
+    
     CSS_PATH = "stylesMBW.tcss"
     
     def compose(self):
