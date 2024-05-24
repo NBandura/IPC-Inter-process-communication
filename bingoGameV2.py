@@ -34,8 +34,10 @@ if(IPC.checkIfStarted()):
 else:
     size=0
     while( size < 3 or size > 7 ):
-        size=int(input("Bitte gebe die Spielfeldgröße ein: "))
-        print(size)
+        try:
+            size=int(input("Bitte gebe die Spielfeldgröße ein: "))
+        except ValueError:
+            None
         if(size < 3 or size > 7 ):
             print("Ungültige Größe: Erlaubt ist eine Größe von 3 - 7.")
     
