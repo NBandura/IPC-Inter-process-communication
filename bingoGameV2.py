@@ -6,20 +6,18 @@ import sys
 import os
 from Logger import Logger
 from IPC import SpielIPC
-
 import argparse
-
-
-
 
 logger = Logger(os.getpid()) #Logger für jeden Prozess erstellen
 logger.logGameStart()
+
 print()
 print()
 print()
 print()
 print()
-print("Bingo Game")
+
+print("<......Bingo Game......>")
 spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
 IPC= SpielIPC(spielname) #IPC für das Spiel erstellen
 
@@ -33,28 +31,27 @@ if(IPC.checkIfStarted()):
         buzzword_Wörter = [zeile.strip() for zeile in file]
 else:
     size=0
-    while( size < 3 or size > 7 ):
+    while(True):
         try:
             size=int(input("Bitte gebe die Spielfeldgröße ein: "))
         except ValueError:
             None
         if(size < 3 or size > 7 ):
             print("Ungültige Größe: Erlaubt ist eine Größe von 3 - 7.")
+        else:
+            break
     
-    erfolgreich=False
-    while (not erfolgreich):
+    while (True):
         try:
             dateipfad=input("Bitte gebe den Dateipfad ein: ")
             buzzword_Wörter = []
             # Wörter werden eingelesen und in einer Liste gespeichert
             with open(dateipfad, 'r') as file:
                 buzzword_Wörter = [zeile.strip() for zeile in file]
-            erfolgreich=True
+            break
         except Exception:
             print("Der Dateipfad ist ungültig!")
 
-    
-    
     IPC.setDateipfad(dateipfad)
     IPC.setGroesse(size)
     IPC.startGame()
