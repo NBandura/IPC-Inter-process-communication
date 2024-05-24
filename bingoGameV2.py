@@ -39,9 +39,10 @@ else:
     while (not erfolgreich):
         try:
             dateipfad=input("Bitte gebe den Dateipfad ein: ")
-            test = []
+            buzzword_Wörter = []
+            # Wörter werden eingelesen und in einer Liste gespeichert
             with open(dateipfad, 'r') as file:
-                test = [zeile.strip() for zeile in file]
+                buzzword_Wörter = [zeile.strip() for zeile in file]
             erfolgreich=True
         except Exception:
             print("Der Dateipfad ist ungültig!")
@@ -63,13 +64,6 @@ else:
 # Sonst bei Bingo 5 sec. warten, dann speicher automatisch freigeben
 
 
-
-
-
-# Wörter werden eingelesen und in einer Liste gespeichert
-buzzword_Wörter = []
-with open(dateipfad, 'r') as file:
-    buzzword_Wörter = [zeile.strip() for zeile in file]
 
 class Bingo(App):
     CSS_PATH = "StylesMBW.tcss"
