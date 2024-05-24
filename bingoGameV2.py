@@ -37,7 +37,7 @@ else:
         except ValueError:
             None
         if(size < 3 or size > 7 ):
-            print("Ungültige Größe: Erlaubt ist eine Größe von 3 - 7.")
+            print("Ungültige Größe: Erlaubt ist eine Größe von 3 - 7 und sie darf keine Dezimalzahl sein")
         else:
             break
     
