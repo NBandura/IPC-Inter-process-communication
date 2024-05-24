@@ -27,6 +27,10 @@ if(IPC.checkIfStarted()):
     size=IPC.getGroesse()
     dateipfad=IPC.getDateipfad()
     istStartProzess=False
+    buzzword_Wörter = []
+    # Wörter werden eingelesen und in einer Liste gespeichert
+    with open(dateipfad, 'r') as file:
+        buzzword_Wörter = [zeile.strip() for zeile in file]
 else:
     size=0
     while( size < 3 or size > 7 ):
