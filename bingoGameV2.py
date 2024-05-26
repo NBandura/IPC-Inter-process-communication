@@ -1,15 +1,13 @@
 import random
 from textual import on
 from textual.app import App
+from textual.dom import DOMNode
 from textual.widgets import Label, Footer, Button, Static
 import sys
 import os
 from Logger import Logger
 from IPC import SpielIPC
 import argparse
-
-logger = Logger(os.getpid()) #Logger für jeden Prozess erstellen
-logger.logGameStart()
 
 print()
 print()
@@ -20,6 +18,8 @@ print()
 print("<......Bingo Game......>")
 spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
 IPC= SpielIPC(spielname) #IPC für das Spiel erstellen
+logger = Logger(os.getpid()) #Logger für jeden Prozess erstellen
+logger.logGameStart()
 
 if(IPC.checkIfStarted()):
     size=IPC.getGroesse()
@@ -81,6 +81,8 @@ class Bingo(App):
         self.quit_button = Button("Quit", id="quit", classes="quit-button")  # Neuer Quit-Button
         self.speicher_freigeben_button = Button("Speicher freigeben", id="speicher_freigeben", classes="freigeben")  # speicher freigeben
         self.getWort = Label("", id="getWort", classes="getWort")
+        self.wortliste_label = Label("", id="wortliste_label")
+        self.CheckBingo_label = Label("", id="CheckBingo_label")
 
 
         yield self.error_message
@@ -90,7 +92,9 @@ class Bingo(App):
             yield self.speicher_freigeben_button
         else:
             yield self.getWort
+            yield self.wortliste_label
         yield self.grid_container
+        yield self.CheckBingo_label
         yield self.gewonnen_label
         yield self.bingo_confirm_button  # Bingo-Bestätigungsbutton hinzufügen
         yield self.quit_button  # Quit-Button hinzufügen
@@ -181,6 +185,7 @@ class Bingo(App):
         if self.überprüfe_bingo():
             logger.logGameResult(0)
             self.update_gewonnen_label("Bingo!") 
+            IPC.bingo()
             #Message für Bingo gewonnen nach dem Button gedrückt wurde 
         else:
             self.update_gewonnen_label("Noch kein Bingo. Versuche es weiter!")
@@ -188,17 +193,26 @@ class Bingo(App):
     def update_gewonnen_label(self, message):
         self.gewonnen_label.update(message)
 
-    def update_lastWort(self, message):
-        self.getWort.update(message)
-
-    # Versuch mit der Aktualisierung
-    #def on_mount(self):
-    #    (
-    #        1/1,
-    #        self.update_lastWort(IPC.getWord())
-    #       pause=True
-    #    )
+    def update_lastWort(self):
+        self.getWort.update(IPC.getLastWort())
     
+    def update_Wortliste(self):
+        self.wortliste_label.update((IPC.getWortString()).replace(";", ", "))
+
+    def update_checkBingo(self):
+        if IPC.checkIfBingo():
+            self.CheckBingo_label.update("Es hat jemand gewonnen!")
+        else:
+            self.CheckBingo_label.update("Es hat noch niemand gewonnen!")
+    
+    def on_mount(self):
+        self.set_interval(0.1, self.update_lastWort)
+        self.set_interval(0.1, self.update_Wortliste)
+        self.set_interval(0.1, self.update_checkBingo)
+    
+    
+
+
     @on(Button.Pressed, "#quit")  # Event-Handler für den Quit-Button
     def on_quit(self, event):
         logger.logGameEnd()
