@@ -26,10 +26,22 @@ class Logger:
         file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Ende des Spiels\n")
         file.close
 
-    def logWord(self, word, buttonId):
+    def logCrossedWord(self, word, buttonId):
         time = datetime.datetime.now()
         file = open(self.file, "a") 
-        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + " " + buttonId + "\n")
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + " (crossed) " + buttonId + "\n")
+        file.close
+
+    def logUncrossedWord(self, word, buttonId):
+        time = datetime.datetime.now()
+        file = open(self.file, "a") 
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + " (uncrossed) " + buttonId + "\n")
+        file.close
+
+    def logBingoOpportunity(self):
+        time = datetime.datetime.now()
+        file = open(self.file, "a")
+        file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Bingo möglich\n")
         file.close
     
     def logGameResult(self, result):
