@@ -81,19 +81,19 @@ class SpielIPC:
         return speicherListe[2]
 
     # Funktion zum Abrufen der Wortliste als String
-    def _getWortString(self):
+    def getWortString(self):
         speicherListe = self._read()
         return speicherListe[3]
 
     # Funktion zum Abrufen der Wortliste als Liste
-    def getWortListe(self):
-        wortString = self._getWortString()
+    def _getWortListe(self):
+        wortString = self.getWortString()
         wortListe = wortString.split(";")
         return wortListe
 
     # Funktion zum Abrufen des letzten Wortes
     def getLastWort(self):
-        wortListe = self.getWortListe()
+        wortListe = self._getWortListe()
         return wortListe[-1]
 
     # Funktion zum Setzen des Bingo-Status
@@ -101,7 +101,7 @@ class SpielIPC:
         position0 = "Bingo"
         position1 = self.getDateipfad()
         position2 = self.getGroesse()
-        position3 = self._getWortString()
+        position3 = self.getWortString()
         if self.checkIfStarted():
             position4 = "started"
         else:
@@ -117,7 +117,7 @@ class SpielIPC:
             position0 = ""
         position1 = dateipfad
         position2 = self.getGroesse()
-        position3 = self._getWortString()
+        position3 = self.getWortString()
         if self.checkIfStarted():
             position4 = "started"
         else:
@@ -133,7 +133,7 @@ class SpielIPC:
             position0 = ""
         position1 = self.getDateipfad()
         position2 = groesse
-        position3 = self._getWortString()
+        position3 = self.getWortString()
         if self.checkIfStarted():
             position4 = "started"
         else:
@@ -149,11 +149,11 @@ class SpielIPC:
             position0 = ""
         position1 = self.getDateipfad()
         position2 = self.getGroesse()
-        if(len(self._getWortString()) > 0):
+        if(len(self.getWortString()) > 0):
             wort = ";" + wort
         else:
             wort = wort
-        position3 = self._getWortString() + wort
+        position3 = self.getWortString() + wort
         if self.checkIfStarted():
             position4 = "started"
         else:
@@ -169,7 +169,7 @@ class SpielIPC:
             position0 = ""
         position1 = self.getDateipfad()
         position2 = self.getGroesse()
-        position3 = self._getWortString()
+        position3 = self.getWortString()
         position4 = "started"
         speicherListe = [position0, position1, position2,position3,position4]
         self._write(speicherListe)
