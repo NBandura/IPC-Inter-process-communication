@@ -8,7 +8,7 @@ class Logger:
         self.file = self._logCreateFile()
 
     def _logCreateFile(self):
-        logsFolderName = "logs"
+        logsFolderName = "player_logs"
         if not os.path.exists(logsFolderName):
             os.makedirs(logsFolderName)
         
