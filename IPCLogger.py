@@ -5,24 +5,26 @@ class IPCLogger:
     
     def __init__(self, gameName):
         self.gameName = gameName
-        self.file = self._logCreateFile()
+        self.file = self._logCreateFile() #automatisches Erstellen der Log-Datei beim erstellen eines Logger Objektes
 
     def _logCreateFile(self): 
-        logsFolderName = "ipc_logs"
-        if not os.path.exists(logsFolderName):
+        logsFolderName = "ipc_logs" #Festlegen des Log-Ordner Namens
+        if not os.path.exists(logsFolderName): #Erstellen eines neuen Log-Ordners, falls dieser nicht vorhanden ist
             os.makedirs(logsFolderName)
         
         time = datetime.datetime.now()
         filename = time.strftime(f"{logsFolderName}/%Y-%m-%d-%H-%M-%S") + f"-ipc-{self.gameName}.txt"
-        with open(filename, "w") as file:
-            pass
-        return filename
+        with open(filename, "w") as file: #"with open" um Datei nicht wieder schließen zu müssen
+            pass #pass um Datei "nur" zu erstellen
+        return filename #Rückgabe des Dateinamens um ihn im Objekt zu verwenden
 
+    #Methode um Grundkonstrukt einer Log-Zeile zu realisieren
     def log(self, message):
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
-            file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + message + "\n")
+            file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + message + "\n") #Grundkonstrukt einer Log-Zeile + Nachricht
 
+    #Methoden um IPC-Ereignisse zu loggen (selbsterklärend über Namen)
     def logGameCreation(self, spielerId):
         self.log(f"Spiel von {spielerId} erstellt")
 
