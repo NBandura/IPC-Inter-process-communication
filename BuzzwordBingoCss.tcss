@@ -23,8 +23,6 @@ Horizontal > VerticalScroll {
     link-background-hover: red;
     width: 100%;
     align-horizontal: center;
-    border: black;
-    link-color-hover: yellow;
     min-width: 5;
     min-height:5;
 }

@@ -1,3 +1,4 @@
+## Importieren der benötigten Bibliotheken
 import random
 from textual import on
 from textual.app import App
@@ -11,25 +12,22 @@ import argparse
 import time
 
 
-print()
-print()
-print()
-print()
-print()
+## Beginn des Bingo Spiels markieren
+print(100*"\n"+"<......Bingo Game......>")
 
-print("<......Bingo Game......>")
+
+## Logger und IPC spielspezifisch erstellen
 spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
-IPC= SpielIPC(spielname) #IPC für das Spiel erstellen
-logger = Logger(os.getpid()) #Logger für jeden Prozess erstellen
-logger.logGameStart()
+IPC= SpielIPC(spielname) 
+Logger = Logger(os.getpid()) 
 
 
+## Start des Spiels: Unterscheidung zwischen Startprozess und Joinprozess
 if(IPC.checkIfStarted()):
     size=IPC.getGroesse()
     dateipfad=IPC.getDateipfad()
     istStartProzess=False
     buzzword_Wörter = []
-    # Wörter werden eingelesen und in einer Liste gespeichert
     with open(dateipfad, 'r') as file:
         buzzword_Wörter = [zeile.strip() for zeile in file]
 else:
@@ -43,72 +41,30 @@ else:
             print("Ungültige Größe: Erlaubt ist eine Größe von 3 - 7 und sie darf keine Dezimalzahl sein")
         else:
             break
-    
     while (True):
         try:
             dateipfad=input("Bitte gebe den Dateipfad ein: ")
             buzzword_Wörter = []
-            # Wörter werden eingelesen und in einer Liste gespeichert
             with open(dateipfad, 'r') as file:
                 buzzword_Wörter = [zeile.strip() for zeile in file]
             break
         except Exception:
             print("Der Dateipfad ist ungültig!")
-
     IPC.setDateipfad(dateipfad)
     IPC.setGroesse(size)
     IPC.startGame()
     istStartProzess=True
-    
-# Startprozess ist fertig
-# Noch zu machen:
-# Prozess muss solange laufen bis (IPC.checkIfBingo) true ist, dann müssen alle die es nicht gesendet haben, ein Verloren Feld bekommen
-# Und so lange auch, die Sachen dauerhaft aktualisieren:
-#   Wortliste anzeigen (IPC.getWortliste)
-#   Letztes Wort anzeigen (IPC.getLastWord)
-# Speicher Freigeben Button in "Spiel Abbrechen" umbennen
-# Sonst bei Bingo 5 sec. warten, dann speicher automatisch freigeben
 
 
-
+## Die Bingo App
 class Bingo(App):
-    CSS_PATH = "StylesMBW.tcss"
-    
-    def compose(self):
-        self.zufallswort_label = Label("", id="zufallswort_label")
-        self.error_message = Label("", id="error_message")
-        self.zufallswort_button = Button("Wort generieren", id="zufallswort")
-        self.grid_container = Static(classes="bingo-grid")
-        self.gewonnen_label = Label("", id="gewonnen_label")
-        self.bingo_confirm_button = Button("Bingo bestätigen", id="bingo_confirm") 
-        self.quit_button = Button("Quit", id="quit", classes="quit-button")  # Neuer Quit-Button
-        self.speicher_freigeben_button = Button("Spiel abbrechen", id="speicher_freigeben", classes="freigeben")  # speicher freigeben
-        self.getWort = Label("", id="getWort")
-        self.wortlisteTitel = Label("\nListe bisheriger Wörter:\n", id="wortlisteTitel",classes="wortlisteTitel")
-        self.wortliste_label = Label("", id="wortliste_label")
-        self.CheckBingo_label = Label("", id="CheckBingo_label")
-        
 
-        yield self.error_message
-        if(istStartProzess):
-            yield self.zufallswort_label
-            yield self.zufallswort_button
-            yield self.speicher_freigeben_button
-        else:
-            yield self.getWort
-        yield self.grid_container
-        yield self.CheckBingo_label
-        yield self.gewonnen_label
-        yield self.bingo_confirm_button  # Bingo-Bestätigungsbutton hinzufügen
-        yield self.quit_button  # Quit-Button hinzufügen
-        yield self.wortlisteTitel
-        yield self.wortliste_label
-        yield Footer()
-      
-        self.SiegerProzess=False
-        self.SpielVorbei=False
-        self.bingo_felder_erstellen(size)  # Erstellen Sie das Bingo-Feld beim Start
+    ## CSS-Datei für das Styling
+    CSS_PATH = "BuzzwordBingoCss.tcss"
 
+
+    ## Allgemeine Funktionen für den späteren gebraucht der App
+    # Erstellen der Bingo-Felder
     def bingo_felder_erstellen(self, size):
         self.grid_container.remove_children()  # Entfernt das alte Grid
         
@@ -140,6 +96,8 @@ class Bingo(App):
         self.grid_container.styles.grid_size_columns = size  # Formatiert in CSS
         self.grid_container.styles.grid_size_rows = size
 
+
+    # Überprüft, ob ein Bingo vorliegt
     def überprüfe_bingo(self):
         # Horizontale Überprüfung
         for y in range(size):
@@ -166,16 +124,55 @@ class Bingo(App):
         self.bingo_confirm_button.remove_class("bingoconf")  # Entfernt die "bingoconf"-Klasse vom Button
         return False
     
-      
-         
+    
+    ## Methode zum Erstellen der GUI
+    def compose(self):
+        # Erstellen der Buttons und Labels
+        self.zufallswort_label = Label("", id="zufallswort_label")
+        self.error_message = Label("", id="error_message")
+        self.zufallswort_button = Button("Wort generieren", id="zufallswort")
+        self.grid_container = Static(classes="bingo-grid")
+        self.gewonnen_label = Label("", id="gewonnen_label")
+        self.bingo_confirm_button = Button("Bingo bestätigen", id="bingo_confirm") 
+        self.quit_button = Button("Quit", id="quit", classes="quit-button")  # Neuer Quit-Button
+        self.speicher_freigeben_button = Button("Spiel abbrechen", id="speicher_freigeben", classes="freigeben")  # speicher freigeben
+        self.getWort = Label("", id="getWort")
+        self.wortlisteTitel = Label("\nListe bisheriger Wörter:\n", id="wortlisteTitel",classes="wortlisteTitel")
+        self.wortliste_label = Label("", id="wortliste_label")
+        self.CheckBingo_label = Label("", id="CheckBingo_label")
+        
+        # Der Anzeige Buttons und Labels hinzufügen
+        yield self.error_message
+        if(istStartProzess):
+            yield self.zufallswort_label
+            yield self.zufallswort_button
+            yield self.speicher_freigeben_button
+        else:
+            yield self.getWort
+        yield self.grid_container
+        yield self.CheckBingo_label
+        yield self.gewonnen_label
+        yield self.bingo_confirm_button 
+        yield self.quit_button 
+        yield self.wortlisteTitel
+        yield self.wortliste_label
+        yield Footer()
 
-    @on(Button.Pressed)  # Behandelt das Ereignis, wenn ein beliebiger Button gedrückt wird
+        # Erstellen Prozess spezifischer Variablen bezüglich des Status des Spiels
+        self.SiegerProzess=False
+        self.SpielVorbei=False
+
+        # Erstellen des Bingo-Feldes beim starten des Spiels
+        self.bingo_felder_erstellen(size)
+
+    
+    ## Event-Methoden für den Button-Druck
+    # Betrifft jeden Button im Grid
+    @on(Button.Pressed) 
     def wort_streiche(self, event: Button.Pressed):
         buttonName = str(event.button.label)
         button_id = str(event.button.id)  # Damit man eben genau diesen Button anspricht, keinen anderen 
-        logger.logWord(buttonName, button_id)
-        # Überprüft, ob der Button Teil des Grids ist
-        if button_id.startswith("button_"):  # Nur die Buttons, die wirklich auch in der Grid, also Tabelle, sind
+        if button_id.startswith("button_"):  # Nur die Buttons, die auch im Grid sind
             if button_id in self.button_status:
                 self.button_status[button_id] = not self.button_status[button_id]  # Ändert den Status des Buttons
                 if self.button_status[button_id]:
@@ -185,34 +182,51 @@ class Bingo(App):
                 if self.überprüfe_bingo():
                     self.update_gewonnen_label("")
 
+    # Betrifft den Button "Wort generieren"
     @on(Button.Pressed, "#zufallswort")
     def zufallswort_generieren(self):
         zufallswort = random.choice(buzzword_Wörter)
         IPC.addWord(zufallswort)
         self.zufallswort_label.update(zufallswort)
 
-    @on(Button.Pressed, "#bingo_confirm")  # Event-Handler für den Bingo-Bestätigungsbutton
+    # Betrifft den Button "Bingo bestätigen"
+    @on(Button.Pressed, "#bingo_confirm")  
     def on_bingo_confirm(self, event):
         if self.überprüfe_bingo():
-            logger.logGameResult(0)
             self.update_gewonnen_label("") 
             IPC.bingo()
             self.SiegerProzess=True
-            #Message für Bingo gewonnen nach dem Button gedrückt wurde 
         else:
             self.update_gewonnen_label("Noch kein Bingo. Versuche es weiter!")
     
+    # Betrifft den Button "Quit"
+    @on(Button.Pressed, "#quit") 
+    def on_quit(self, event):
+        self.exit()
+
+    # Betrifft den Button "Spiel abbrechen"
+    @on(Button.Pressed, "#speicher_freigeben") 
+    def speicher_freigeben(self):
+        IPC.bingo()
+        
+    
+
+    ## Update-Methoden für die Labels
+    # Aktualisiert das Label für das Gewinnen
     def update_gewonnen_label(self, message):
         self.gewonnen_label.update(message)
 
+    # Aktualisiert das Label für das aktuelle Wort
     def update_lastWort(self):
         if(not self.SpielVorbei):
             self.getWort.update("Aktuells Wort: "+IPC.getLastWort())
     
+    # Aktualisiert das Label für die Wortliste
     def update_Wortliste(self):
         if(not self.SpielVorbei):
             self.wortliste_label.update((IPC.getWortString()).replace(";", "\n"))
 
+    # Aktualisiert das Label für das Bingo und deaktiviert die Buttons, wenn ein Bingo empfangen wird
     def update_checkBingo(self):
         if(not self.SpielVorbei):
             if IPC.checkIfBingo():
@@ -225,33 +239,17 @@ class Bingo(App):
                 else:
                     self.CheckBingo_label.update("Du hast gewonnen!")
                 time.sleep(1)
-                IPC.speicherFreigeben()
-                
-                
+                IPC.speicherFreigeben()      
         elif(not self.SpielVorbei):
             self.CheckBingo_label.update("Es hat noch niemand gewonnen!")
     
+    ## Interval-Methoden für die Aktualisierung der Labels
     def on_mount(self):
-            self.set_interval(0.1, self.update_lastWort)
-            self.set_interval(0.1, self.update_Wortliste)
-            self.set_interval(0.1, self.update_checkBingo)
+        self.set_interval(0.1, self.update_lastWort)
+        self.set_interval(0.1, self.update_Wortliste)
+        self.set_interval(0.1, self.update_checkBingo)
        
-    
-    
 
-
-    @on(Button.Pressed, "#quit")  # Event-Handler für den Quit-Button
-    def on_quit(self, event):
-        logger.logGameEnd()
-        self.exit()
-
-    @on(Button.Pressed, "#speicher_freigeben") 
-    def speicher_freigeben(self):
-        logger.logGameEnd()
-        IPC.bingo()
-        self.exit()
-
-    
-
+## Starten der Bingo App
 if __name__ == "__main__": 
     Bingo().run()
