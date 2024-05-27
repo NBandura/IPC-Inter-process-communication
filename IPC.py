@@ -36,6 +36,7 @@ class SpielIPC:
         listeAlsCode = shared_memory_mmap.read(shared_memory.size)
         speicherListe = pickle.loads(listeAlsCode)
         shared_memory_mmap.close()
+        shared_memory.close_fd()
         return speicherListe
 
     # Funktion zum Schreiben der Daten in den Shared Memory
@@ -45,6 +46,7 @@ class SpielIPC:
         shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_WRITE)
         shared_memory_mmap.write(listeAlsCode)
         shared_memory_mmap.close()
+        shared_memory.close_fd()
 
     # Funktion zum Löschen des Shared Memory
     def speicherFreigeben(self):
