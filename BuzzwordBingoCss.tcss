@@ -56,3 +56,7 @@ Horizontal > VerticalScroll {
     min-width: 5;
     min-height:5;
 }
+
+.header {
+    background: grey;
+}

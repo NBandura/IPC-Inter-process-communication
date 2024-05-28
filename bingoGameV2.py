@@ -1,9 +1,9 @@
 ## Importieren der benötigten Bibliotheken
 import random
 from textual import on
-from textual.app import App
+from textual.app import App, ComposeResult
 from textual.dom import DOMNode
-from textual.widgets import Label, Footer, Button, Static
+from textual.widgets import Label, Footer, Button, Static, Header
 import sys
 import os
 from Logger import Logger
@@ -124,6 +124,7 @@ class Bingo(App):
         self.bingo_confirm_button.remove_class("bingoconf")  # Entfernt die "bingoconf"-Klasse vom Button
         return False
     
+
     
     ## Methode zum Erstellen der GUI
     def compose(self):
@@ -140,8 +141,11 @@ class Bingo(App):
         self.wortlisteTitel = Label("\nListe bisheriger Wörter:\n", id="wortlisteTitel",classes="wortlisteTitel")
         self.wortliste_label = Label("", id="wortliste_label")
         self.CheckBingo_label = Label("", id="CheckBingo_label")
+        self.title = f"Spielname: {spielname}     " # Header
+        self.sub_title = f"     SpielerID: {os.getpid()}" # Header
         
         # Der Anzeige Buttons und Labels hinzufügen
+        yield Header("", id="header-ID", classes="header")
         yield self.error_message
         if(istStartProzess):
             yield self.zufallswort_label
