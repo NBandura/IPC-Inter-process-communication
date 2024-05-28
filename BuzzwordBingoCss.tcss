@@ -59,4 +59,7 @@ Horizontal > VerticalScroll {
 
 .header {
     background: grey;
+    height: 3;
+    
 }
+

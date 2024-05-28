@@ -141,8 +141,8 @@ class Bingo(App):
         self.wortlisteTitel = Label("\nListe bisheriger Wörter:\n", id="wortlisteTitel",classes="wortlisteTitel")
         self.wortliste_label = Label("", id="wortliste_label")
         self.CheckBingo_label = Label("", id="CheckBingo_label")
-        self.title = f"Spielname: {spielname}     " # Header
-        self.sub_title = f"     SpielerID: {os.getpid()}" # Header
+        self.title = f"Spielname: {spielname} \t" # Header
+        self.sub_title = f"\tSpielerID: {os.getpid()}" # Header
         
         # Der Anzeige Buttons und Labels hinzufügen
         yield Header("", id="header-ID", classes="header")
