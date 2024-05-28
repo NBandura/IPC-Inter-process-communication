@@ -19,10 +19,11 @@ print(100*"\n"+"<......Bingo Game......>")
 ## Logger und IPC spielspezifisch erstellen
 spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
 IPC= SpielIPC(spielname) 
-Logger = Logger(os.getpid()) 
+logger = Logger(os.getpid()) 
 
 
 ## Start des Spiels: Unterscheidung zwischen Startprozess und Joinprozess
+logger.logGameStart()
 if(IPC.checkIfStarted()):
     size=IPC.getGroesse()
     dateipfad=IPC.getDateipfad()
@@ -103,22 +104,26 @@ class Bingo(App):
         for y in range(size):
             if all(self.button_status.get(f"button_{y}_{x}", False) for x in range(size)):
                 self.bingo_confirm_button.add_class("bingoconf")  # Fügt die "bingoconf"-Klasse zum Button hinzu
+                logger.logBingoOpportunity()
                 return True
     
         # Vertikale Überprüfung
         for x in range(size):
             if all(self.button_status.get(f"button_{y}_{x}", False) for y in range(size)):
                 self.bingo_confirm_button.add_class("bingoconf")  # Fügt die "bingoconf"-Klasse zum Button hinzu
+                logger.logBingoOpportunity()
                 return True
     
         # Diagonale Überprüfung (von links oben nach rechts unten)
         if all(self.button_status.get(f"button_{i}_{i}", False) for i in range(size)):
             self.bingo_confirm_button.add_class("bingoconf")  # Fügt die "bingoconf"-Klasse zum Button hinzu
+            logger.logBingoOpportunity()
             return True
     
         # Diagonale Überprüfung (von rechts oben nach links unten)
         if all(self.button_status.get(f"button_{i}_{size-1-i}", False) for i in range(size)):
             self.bingo_confirm_button.add_class("bingoconf")  # Fügt die "bingoconf"-Klasse zum Button hinzu
+            logger.logBingoOpportunity()
             return True
     
         self.bingo_confirm_button.remove_class("bingoconf")  # Entfernt die "bingoconf"-Klasse vom Button
@@ -180,8 +185,10 @@ class Bingo(App):
             if button_id in self.button_status:
                 self.button_status[button_id] = not self.button_status[button_id]  # Ändert den Status des Buttons
                 if self.button_status[button_id]:
+                    logger.logCrossedWord(buttonName, button_id)
                     event.button.add_class("strikethrough")  # Fügt dem Button die Klasse "strikethrough" hinzu
                 else:
+                    logger.logUncrossedWord(buttonName, button_id)
                     event.button.remove_class("strikethrough")  # Entfernt die Klasse "strikethrough" vom Button
                 if self.überprüfe_bingo():
                     self.update_gewonnen_label("")
@@ -239,11 +246,14 @@ class Bingo(App):
                 self.speicher_freigeben_button.disabled=True
                 self.SpielVorbei=True
                 if(self.SiegerProzess==False):
+                    logger.logGameResult(1)
                     self.CheckBingo_label.update("Du hast verloren!")
                 else:
+                    logger.logGameResult(0)
                     self.CheckBingo_label.update("Du hast gewonnen!")
                 time.sleep(1)
-                IPC.speicherFreigeben()      
+                IPC.speicherFreigeben()  
+                logger.logGameEnd()    
         elif(not self.SpielVorbei):
             self.CheckBingo_label.update("Es hat noch niemand gewonnen!")
     

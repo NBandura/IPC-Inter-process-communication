@@ -19,25 +19,25 @@ class Logger:
         return filename #Rückgabe des Dateinamens um ihn im Objekt zu verwenden
 
     #Spielstart mit Zeitstempel der Log-Datei hinzufügen
-    def logGameStart(self):
+    def logGameStart(self):#
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
             file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Start des Spiels\n")
 
     #Spielende mit Zeitstempel der Log-Datei hinzufügen
-    def logGameEnd(self):
+    def logGameEnd(self):#
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
             file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Ende des Spiels\n")
 
     #durchgestrichenes Wort mit Zeitstempel und Koordinaten der Log-Datei hinzufügen
-    def logCrossedWord(self, word, buttonId):
+    def logCrossedWord(self, word, buttonId):#
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
             file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + " (crossed) " + buttonId + "\n")
     
     #entferntes Wort mit Zeitstempel und Koordinaten der Log-Datei hinzufügen
-    def logUncrossedWord(self, word, buttonId):
+    def logUncrossedWord(self, word, buttonId):#
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
             file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + word + " (uncrossed) " + buttonId + "\n")
@@ -46,10 +46,10 @@ class Logger:
     def logBingoOpportunity(self):
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
-            file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Bingo möglich\n")
+            file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Bingo Überprüfung (true)\n")
 
     #Spielende der Log-Datei hinzufügen
-    def logGameResult(self, result):
+    def logGameResult(self, result):#
         time = datetime.datetime.now()
         with open(self.file, "a") as file:
             #Prüfen, welcher Status für den jeweiligen Spieler bei Spielende vorliegt (0 = Sieg, 1 = Abbruch)
