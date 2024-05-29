@@ -2,7 +2,7 @@ import posix_ipc
 import mmap
 import pickle
 import random
-from IPCLogger import IPCLogger
+from IPC_Logger import IPCLogger
 
 
 class SpielIPC:

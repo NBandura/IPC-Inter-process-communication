@@ -6,7 +6,7 @@ from textual.dom import DOMNode
 from textual.widgets import Label, Footer, Button, Static, Header
 import sys
 import os
-from Logger import Logger
+from Player_Logger import Logger
 from IPC import SpielIPC
 import argparse
 import time
@@ -83,7 +83,7 @@ else:
 class Bingo(App):
 
     ## CSS-Datei für das Styling
-    CSS_PATH = "BuzzwordBingoCss.tcss"
+    CSS_PATH = "BwB_Css.tcss"
 
 
     ## Allgemeine Funktionen für den späteren gebraucht der App

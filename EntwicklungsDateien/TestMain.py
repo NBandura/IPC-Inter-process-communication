@@ -1,5 +1,5 @@
-from Logger import Logger
-from IPCLogger import IPCLogger
+from Player_Logger import Logger
+from IPC_Logger import IPCLogger
 
 spieler1 = Logger(239232)
 spieler2 = Logger(4324)

@@ -31,9 +31,6 @@ class IPCLogger:
     def logAddWord(self, word,spielerId):
         self.log(f"Wort von {spielerId} hinzugefügt: {word}")
 
-    def logConnect(self, spielerId):
-        self.log(spielerId + " hat sich mit Spiel verbunden")
-
     def logBingo(self, spielerId):
         self.log(spielerId + " hat Bingo gerufen")
 
