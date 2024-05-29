@@ -56,4 +56,4 @@ class Logger:
             if result == 0:
                 file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Sieg\n")
             elif result == 1:
-                file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Abbruch\n")
+                file.write(time.strftime("%Y-%m-%d-%H-%M-%S ") + "Niederlage\n")
