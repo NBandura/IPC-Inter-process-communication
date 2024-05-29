@@ -12,8 +12,7 @@ class IPCLogger:
         if not os.path.exists(logsFolderName): #Erstellen eines neuen Log-Ordners, falls dieser nicht vorhanden ist
             os.makedirs(logsFolderName)
         
-        time = datetime.datetime.now()
-        filename = time.strftime(f"{logsFolderName}/%Y-%m-%d-%H-%M-%S") + f"-ipc-{self.gameName}.txt"
+        filename = f"{logsFolderName}/ipc-{self.gameName}.txt"
         with open(filename, "w") as file: #"with open" um Datei nicht wieder schließen zu müssen
             pass #pass um Datei "nur" zu erstellen
         return filename #Rückgabe des Dateinamens um ihn im Objekt zu verwenden
