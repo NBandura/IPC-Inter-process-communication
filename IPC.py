@@ -2,12 +2,15 @@ import posix_ipc
 import mmap
 import pickle
 import random
+from IPCLogger import IPCLogger
 
 
 class SpielIPC:
-    # Konstruktor für unterschiedliche Spiele
-    def __init__(self, SpielName):
+      # Konstruktor für unterschiedliche Spiele
+    def __init__(self, SpielName,ProzessID):
         self.SpielName = SpielName
+        self.ProzessID = ProzessID
+        self.IPCLogger=IPCLogger(SpielName,self.getIPC_ID())
 
     # Funktion zum Verbinden mit dem Shared Memory
     def _connect(self):
@@ -54,12 +57,14 @@ class SpielIPC:
         shared_memory = self._connect()
         try:
             shared_memory.unlink()
+            self.IPCLogger.logGameDeletion(self.ProzessID)
         except posix_ipc.ExistentialError:
             None
 
     # Funktion zum Überprüfen, ob ein Bingo erreicht wurde
     def checkIfBingo(self):
         speicherListe = self._read()
+        self.IPCLogger.logCheckIfBingo(self.ProzessID)
         if speicherListe[0] == "Bingo":
             return True
         else:
@@ -73,6 +78,7 @@ class SpielIPC:
     # Check, ob das Spiel gestartet wurde
     def checkIfStarted(self):
         speicherListe = self._read()
+        self.IPCLogger.logReadStartStatus(self.ProzessID)
         if speicherListe[4] == "started":
             return True
         else:
@@ -81,16 +87,19 @@ class SpielIPC:
     # Funktion zum Abrufen des Dateipfads
     def getDateipfad(self):
         speicherListe = self._read()
+        self.IPCLogger.logGetDateipfad(self.ProzessID)
         return speicherListe[1]
 
     # Funktion zum Abrufen der Größe des Spielfeldes
     def getGroesse(self):
         speicherListe = self._read()
+        self.IPCLogger.logGetGröße(self.ProzessID)
         return speicherListe[2]
 
     # Funktion zum Abrufen der Wortliste als String
     def getWortString(self):
         speicherListe = self._read()
+        self.IPCLogger.logReadWortliste(self.ProzessID)
         return speicherListe[3]
 
     # Funktion zum Abrufen der Wortliste als Liste
@@ -102,6 +111,7 @@ class SpielIPC:
     # Funktion zum Abrufen des letzten Wortes
     def getLastWort(self):
         wortListe = self._getWortListe()
+        self.IPCLogger.logReadLastWord(self.ProzessID)
         return wortListe[-1]
 
     # Funktion zum Setzen des Bingo-Status
@@ -117,6 +127,8 @@ class SpielIPC:
         position5 = self.getIPC_ID()
         speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
+        self.IPCLogger.logBingo(self.ProzessID)
+
 
     # Funktion zum Setzen des Dateipfads
     def setDateipfad(self,dateipfad):
@@ -134,6 +146,7 @@ class SpielIPC:
         position5 = self.getIPC_ID()
         speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
+        self.IPCLogger.logSetDateipfad(self.ProzessID,dateipfad)
 
     # Funktion zum Setzen der Größe des Spielfeldes
     def setGroesse(self,groesse):
@@ -151,6 +164,7 @@ class SpielIPC:
         position5 = self.getIPC_ID()
         speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
+        self.IPCLogger.logSetGröße(self.ProzessID,groesse)
 
     # Funktion zum Hinzufügen eines Wortes zur Wortliste
     def addWord(self,wort):
@@ -172,6 +186,7 @@ class SpielIPC:
         position5 = self.getIPC_ID()
         speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
+        self.IPCLogger.logAddWord(self.ProzessID,wort)
 
     # Funktion zum Starten des Spiels
     def startGame(self):
@@ -186,3 +201,4 @@ class SpielIPC:
         position5 = self.getIPC_ID()
         speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
+        self.IPCLogger.logGameCreation(self.ProzessID)

@@ -19,7 +19,7 @@ print(100*"\n"+"<......Bingo Game......>")
 ## Spielnamen wählen und IPC spielspezifisch erstellen
 while(True):
     spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
-    IPC= SpielIPC(spielname)
+    IPC= SpielIPC(spielname,str(os.getpid()))
     if(IPC.checkIfStarted()):
         print("Das Spiel läuft bereits. Sie werden dem Spiel \""+spielname+"\" beitreten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
         if(input()==""):

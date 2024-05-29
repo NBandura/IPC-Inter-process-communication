@@ -28,17 +28,42 @@ class IPCLogger:
     def logGameCreation(self, spielerId):
         self.log(f"Spiel von {spielerId} erstellt")
 
-    def logAddWord(self, word):
-        self.log(f"Wort hinzugefügt: {word}")
+    def logAddWord(self, word,spielerId):
+        self.log(f"Wort von {spielerId} hinzugefügt: {word}")
 
     def logConnect(self, spielerId):
         self.log(spielerId + " hat sich mit Spiel verbunden")
 
-    def logRead(self, spielerId):
-        self.log(spielerId + " hat aus Shared Memory gelesen")
+    def logBingo(self, spielerId):
+        self.log(spielerId + " hat Bingo gerufen")
 
-    def logWrite(self, spielerId):
-        self.log(spielerId + " hat in Shared Memory geschrieben")
+    def logSetDateipfad(self, spielerId, dateipfad):
+        message=spielerId + " hat den Dateipfad", dateipfad ,"gesetzt"
+        message=str(message)
+        self.log(message)
 
-    def logGameDeletion(self):
-        self.log("Shared Memory wurde gelöscht (Spielende)")
+    def logSetGröße(self, spielerId, größe):
+        message=spielerId + " hat die Spielgröße" + str(größe) + "gesetzt"
+        message=str(message)
+        self.log(message)
+
+    def logReadLastWord(self, spielerId):
+        self.log(spielerId + " hat das letzte Wort aus demShared Memory gelesen")
+
+    def logReadWortliste(self, spielerId):
+        self.log(spielerId + " hat die Wortliste aus demShared Memory gelesen")
+
+    def logReadStartStatus(self, spielerId):
+        self.log(spielerId + " hat den Start-Status aus demShared Memory gelesen")
+
+    def logGetDateipfad(self, spielerId):
+        self.log(spielerId + " hat den Dateipfad aus demShared Memory gelesen")
+
+    def logGetGröße(self, spielerId):
+        self.log(spielerId + " hat die Größe aus demShared Memory gelesen")
+
+    def logCheckIfBingo(self, spielerId):
+        self.log(spielerId + " hat den Bingo-Status aus demShared Memory gelesen")
+
+    def logGameDeletion(self, spielerID):
+        self.log(spielerID+ " hat den Shared Memory gelöscht (Spielende)")
