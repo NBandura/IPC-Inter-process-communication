@@ -1,6 +1,7 @@
 import posix_ipc
 import mmap
 import pickle
+import random
 
 
 class SpielIPC:
@@ -22,7 +23,7 @@ class SpielIPC:
             speicherListe = pickle.loads(listeAlsCode)
         except pickle.UnpicklingError:
             # Falls ein Fehler beim Entpacken der Daten auftritt, weil keine Liste da ist, wird eine leere Liste erzeugt und in den Shared Memory geschrieben
-            listeAlsCode = pickle.dumps(["", "", "", "",""])
+            listeAlsCode = pickle.dumps(["", "", "", "","",str(random.randint(0,1000000))])
             shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_WRITE)
             shared_memory_mmap.write(listeAlsCode)
             shared_memory_mmap.close()
@@ -63,6 +64,11 @@ class SpielIPC:
             return True
         else:
             return False
+        
+    # Funktion zum Abrufen der IPC-ID
+    def getIPC_ID(self):
+        speicherListe = self._read()
+        return speicherListe[5]
 
     # Check, ob das Spiel gestartet wurde
     def checkIfStarted(self):
@@ -108,7 +114,8 @@ class SpielIPC:
             position4 = "started"
         else:
             position4 = ""
-        speicherListe = [position0, position1, position2,position3,position4]
+        position5 = self.getIPC_ID()
+        speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
 
     # Funktion zum Setzen des Dateipfads
@@ -124,7 +131,8 @@ class SpielIPC:
             position4 = "started"
         else:
             position4 = ""
-        speicherListe = [position0, position1, position2,position3,position4]
+        position5 = self.getIPC_ID()
+        speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
 
     # Funktion zum Setzen der Größe des Spielfeldes
@@ -140,7 +148,8 @@ class SpielIPC:
             position4 = "started"
         else:
             position4 = ""
-        speicherListe = [position0, position1, position2,position3,position4]
+        position5 = self.getIPC_ID()
+        speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
 
     # Funktion zum Hinzufügen eines Wortes zur Wortliste
@@ -160,7 +169,8 @@ class SpielIPC:
             position4 = "started"
         else:
             position4 = ""
-        speicherListe = [position0, position1, position2,position3,position4]
+        position5 = self.getIPC_ID()
+        speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)
 
     # Funktion zum Starten des Spiels
@@ -173,5 +183,6 @@ class SpielIPC:
         position2 = self.getGroesse()
         position3 = self.getWortString()
         position4 = "started"
-        speicherListe = [position0, position1, position2,position3,position4]
+        position5 = self.getIPC_ID()
+        speicherListe = [position0, position1, position2,position3,position4,position5]
         self._write(speicherListe)

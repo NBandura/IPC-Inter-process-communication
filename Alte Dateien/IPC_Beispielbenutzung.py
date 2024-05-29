@@ -3,7 +3,7 @@ print()
 print()
 print()
 print()
-spielname="Test"
+spielname="test"
 IPC=SpielIPC(spielname)
 print("Mit Spiel "+spielname+" verbunden")
 
@@ -15,7 +15,7 @@ print("Dateipfad:", IPC.getDateipfad())
 
 print("Größe:", IPC.getGroesse())
 
-print("Wortliste:", IPC.getWortListe())
+print("Wortliste:", IPC.getWortString())
 
 print("Letztes Wort:", IPC.getLastWort())
 
@@ -57,7 +57,7 @@ print("Methode getGroesse() aufgerufen")
 print("Größe:", groesse)
 print()
 
-wortliste = IPC.getWortListe()
+wortliste = IPC.getWortString()
 print("Methode getWortListe() aufgerufen")
 print("Wortliste:", wortliste)
 print()
