@@ -251,7 +251,7 @@ class Bingo(App):
     # Aktualisiert das Label für das aktuelle Wort
     def update_lastWort(self):
         if(not self.SpielVorbei):
-            self.getWort.update("Aktuells Wort: "+IPC.getLastWort())
+            self.getWort.update("Aktuelles Wort: "+IPC.getLastWort())
     
     # Aktualisiert das Label für die Wortliste
     def update_Wortliste(self):

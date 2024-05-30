@@ -40,7 +40,7 @@ class IPCLogger:
         self.log(message)
 
     def logSetGröße(self, spielerId, größe):
-        message=spielerId + " hat die Spielgröße" + str(größe) + "gesetzt"
+        message=spielerId + " hat die Spielgröße " + str(größe) + " gesetzt"
         message=str(message)
         self.log(message)
 
