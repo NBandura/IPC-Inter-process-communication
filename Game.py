@@ -10,6 +10,7 @@ from Player_Logger import Logger
 from IPC import SpielIPC
 import argparse
 import time
+import atexit
 
 
 ## Beginn des Bingo Spiels markieren
@@ -21,24 +22,25 @@ while(True):
     spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
     IPC= SpielIPC(spielname,str(os.getpid()))
     if(IPC.checkIfStarted()):
-        print("Das Spiel läuft bereits. Sie werden dem Spiel \""+spielname+"\" beitreten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
-        if(input()==""):
+        eingabe=input("Das Spiel läuft bereits. Sie werden dem Spiel \""+spielname+"\" beitreten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
+        if(eingabe==""):
             break
-        elif(input()=="exit"):
+        elif(eingabe=="exit"):
+            IPC.verbindungTrennen()
             sys.exit()
         else:
+            IPC.verbindungTrennen()
             continue
     else:
-        print("Das Spiel existiert noch nicht. Sie werden das Spiel \""+spielname+"\" erstellen und hosten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
-        if(input()==""):
+        eingabe=input("Das Spiel existiert noch nicht. Sie werden das Spiel \""+spielname+"\" erstellen und hosten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
+        if(eingabe==""):
             break
-        elif(input()=="exit"):
+        elif(eingabe=="exit"):
             IPC.speicherFreigeben()
             sys.exit()
         else:
             IPC.speicherFreigeben()
             continue
-
 
 ## Logger Prozessspezifisch erstellen
 logger = Logger(os.getpid()) 
@@ -234,6 +236,7 @@ class Bingo(App):
     # Betrifft den Button "Quit"
     @on(Button.Pressed, "#quit") 
     def on_quit(self, event):
+        IPC.verbindungTrennen()
         self.exit()
 
     # Betrifft den Button "Spiel abbrechen"

@@ -64,3 +64,6 @@ class IPCLogger:
 
     def logGameDeletion(self, spielerID):
         self.log(spielerID+ " hat den Shared Memory gelöscht (Spielende)")
+
+    def logVerbindungTrennen (self, spielerID):
+        self.log(spielerID+" hat (falls vorhanden) die Verbindung getrennt")

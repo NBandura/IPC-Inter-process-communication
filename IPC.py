@@ -10,6 +10,7 @@ class SpielIPC:
     def __init__(self, SpielName,ProzessID):
         self.SpielName = SpielName
         self.ProzessID = ProzessID
+        self.Connection = self._connect()
         self.IPCLogger=IPCLogger(SpielName,self.getIPC_ID())
 
     # Funktion zum Verbinden mit dem Shared Memory
@@ -35,31 +36,36 @@ class SpielIPC:
 
     # Funktion zum Lesen der Daten aus dem Shared Memory
     def _read(self):
-        shared_memory = self._connect()
+        shared_memory = self.Connection
         shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_READ)
         listeAlsCode = shared_memory_mmap.read(shared_memory.size)
         speicherListe = pickle.loads(listeAlsCode)
         shared_memory_mmap.close()
-        shared_memory.close_fd()
         return speicherListe
 
     # Funktion zum Schreiben der Daten in den Shared Memory
     def _write(self,speicherListe):
         listeAlsCode = pickle.dumps(speicherListe)
-        shared_memory = self._connect()
+        shared_memory = self.Connection
         shared_memory_mmap = mmap.mmap(shared_memory.fd, shared_memory.size, mmap.MAP_SHARED, mmap.PROT_WRITE)
         shared_memory_mmap.write(listeAlsCode)
         shared_memory_mmap.close()
-        shared_memory.close_fd()
+
+    def verbindungTrennen(self):
+        self.Connection.close_fd()
+        self.IPCLogger.logVerbindungTrennen(self.ProzessID)
+        return None
 
     # Funktion zum Löschen des Shared Memory
     def speicherFreigeben(self):
-        shared_memory = self._connect()
+        shared_memory = self.Connection
         try:
             shared_memory.unlink()
             self.IPCLogger.logGameDeletion(self.ProzessID)
         except posix_ipc.ExistentialError:
-            None
+            pass
+        finally:
+            self.verbindungTrennen()
 
     # Funktion zum Überprüfen, ob ein Bingo erreicht wurde
     def checkIfBingo(self):
