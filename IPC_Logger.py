@@ -35,7 +35,7 @@ class IPCLogger:
         self.log(spielerId + " hat Bingo gerufen")
 
     def logSetDateipfad(self, spielerId, dateipfad):
-        message=spielerId + " hat den Dateipfad", dateipfad ,"gesetzt"
+        message=spielerId + " hat den Dateipfad "+ dateipfad +" gesetzt"
         message=str(message)
         self.log(message)
 

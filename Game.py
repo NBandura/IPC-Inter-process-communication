@@ -72,6 +72,9 @@ else:
             buzzword_Wörter = []
             with open(dateipfad, 'r') as file:
                 buzzword_Wörter = [zeile.strip() for zeile in file]
+            if(len(buzzword_Wörter)<size*size):
+                print("Die Anzahl der Wörter in der Datei ist zu gering!")
+                continue
             break
         except Exception:
             print("Der Dateipfad ist ungültig!")
