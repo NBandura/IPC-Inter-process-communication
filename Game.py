@@ -22,7 +22,7 @@ while(True):
     spielname = input("Bitte geben Sie den Spielnamen ein, mit dem Sie sich verbinden wollen: ")
     IPC= SpielIPC(spielname,str(os.getpid()))
     if(IPC.checkIfStarted()):
-        eingabe=input("Das Spiel läuft bereits. Sie werden dem Spiel \""+spielname+"\" beitreten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
+        eingabe=input("Das Spiel läuft bereits.\nSie werden dem Spiel \""+spielname+"\" beitreten.\n\nBestätigen Sie mit Enter.\n\"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
         if(eingabe==""):
             break
         elif(eingabe=="exit"):
@@ -32,7 +32,7 @@ while(True):
             IPC.verbindungTrennen()
             continue
     else:
-        eingabe=input("Das Spiel existiert noch nicht. Sie werden das Spiel \""+spielname+"\" erstellen und hosten. Bestätigen Sie mit Enter. \"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
+        eingabe=input("Das Spiel existiert noch nicht.\nSie werden das Spiel \""+spielname+"\" erstellen und hosten.\n\nBestätigen Sie mit Enter.\n\"exit\" wird den Prozess beenden. Jede andere Eingabe lässt Sie einen neuen Spielnamen eingeben.")
         if(eingabe==""):
             break
         elif(eingabe=="exit"):
@@ -68,7 +68,11 @@ else:
             break
     while (True):
         try:
-            dateipfad=input("Bitte gebe den Dateipfad ein: ")
+            eingabe=input("Möchtest du die standard Buzzwords-Datei verwenden, drücke Enter. Sonst gib den Pfad an.")
+            if(eingabe==""):
+                dateipfad="buzzwords.txt"
+            else:
+                dateipfad=eingabe
             buzzword_Wörter = []
             with open(dateipfad, 'r') as file:
                 buzzword_Wörter = [zeile.strip() for zeile in file]
@@ -271,6 +275,7 @@ class Bingo(App):
                 self.bingo_confirm_button.disabled=True
                 self.zufallswort_button.disabled=True
                 self.speicher_freigeben_button.disabled=True
+                self.grid_container.disabled=True
                 self.SpielVorbei=True
                 if(self.SiegerProzess==False):
                     logger.logGameResult(1)
