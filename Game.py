@@ -2,15 +2,12 @@
 import random
 from textual import on
 from textual.app import App, ComposeResult
-from textual.dom import DOMNode
 from textual.widgets import Label, Footer, Button, Static, Header
 import sys
 import os
 from Player_Logger import Logger
 from IPC import SpielIPC
-import argparse
 import time
-import atexit
 
 
 ## Beginn des Bingo Spiels markieren
