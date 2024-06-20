@@ -68,7 +68,7 @@ else:
             break
     while (True):
         try:
-            eingabe=input("Möchtest du die standard Buzzwords-Datei verwenden, drücke Enter. Sonst gib den Pfad an.")
+            eingabe=input("Möchtest du die standard Buzzwords-Datei verwenden, drücke Enter. Sonst gib den Pfad an.\nDiese Funktion steht nur zur Verfügung, wenn das Spiel direkt aus dem Ordner gestartet wird.")
             if(eingabe==""):
                 dateipfad="buzzwords.txt"
             else:
